@@ -2677,7 +2677,7 @@ BEGIN
    insert into ns_opt_tag (tag_id, tag)
         select nextval('cm_pk_seq'), p_tag
         from ns_opt_tag
-        where not exists (select 1 from ns_opt_tag where tag = p_tag);
+        where not exists (select tag from ns_opt_tag where tag = p_tag) LIMIT 1;
         
     insert into dj_ns_opt (rfc_id, ns_id, created, tag_id) values (p_rfc_id, p_ns_id, now(), (select tag_id from ns_opt_tag where tag=p_tag));    
     return p_ns_id;
@@ -2721,7 +2721,7 @@ BEGIN
     insert into ns_opt_tag (tag_id, tag)
         select nextval('cm_pk_seq'), p_tag
         from ns_opt_tag
-        where not exists (select 1 from ns_opt_tag where tag = p_tag);
+        where not exists (select tag from ns_opt_tag where tag = p_tag) LIMIT 1;
         
     insert into cm_ns_opt (ci_id, ns_id, created, tag_id) values (p_ci_id, p_ns_id, now(), (select tag_id from ns_opt_tag where tag=p_tag));    
     return p_ns_id;
@@ -2751,5 +2751,4 @@ $BODY$
   COST 100;
 
 ALTER FUNCTION cm_delete_alt_namespace(bigint, bigint) OWNER TO :user;
-
 
